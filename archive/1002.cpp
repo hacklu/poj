@@ -1,0 +1,253 @@
+#include <string>
+#include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <cstring>
+using namespace std;
+char toNum(char c)
+{
+        switch(c)
+        {
+                case 'A':
+                case 'B':
+                case 'C':
+                        return '2';
+                case 'D':
+                case 'E':
+                case 'F':
+                        return '3';
+                case 'G':
+                case 'H':
+                case 'I':
+                        return '4';
+                case 'J':
+                case 'K':
+                case 'L':
+                        return '5';
+                case 'M':
+                case 'N':
+                case 'O':
+                        return '6';
+                case 'P':
+                case 'R':
+                case 'S':
+                        return '7';
+                case 'T':
+                case 'U':
+                case 'V':
+                        return '8';
+                case 'W':
+                case 'X':
+                case 'Y':
+                        return '9';
+        }
+}
+char totoNum[] = {'2','2','2','3','3','3','4','4','4','5','5','5','6','6','6','7','0','7','7','8','8','8','9','9','9','0'};
+//void decode(string s,char *old)
+void decode(char* s,char *old)
+{
+        char * tmp =old;
+        tmp[7] = '\0';
+
+        int i=0;
+       // int j =s.length();
+        int index =0;
+        for(;index<7;i++)
+        {
+                //char c = s.at(i);
+                char c = s[i];
+                if(c == '-')
+                        continue;
+                else if( c>='0' && c<='9')
+                        tmp[index++] = c;
+                else
+                        //tmp[index++] = toNum(c);
+                        tmp[index++] = totoNum[c-'A'];
+        }
+        //return tmp;
+//      return atoi(tmp);
+}
+
+void merge(int a[],int begin,int end)
+{
+
+
+
+}
+
+void merge_sort(int a[],int length)
+{
+
+}
+void quick_sort_str(char **a,int length,int (*func)(char* indexa,char* indexb))
+{
+        int flags = 0; //1 1->N; 0 N->1;
+        int i=0;
+        int j = length -1;
+        //int key = a[i];
+        char* key = a[0];
+        for(;i!=j;)
+        {
+                if(flags)
+                {
+                //      if(a[i] > key)
+                        if((*func)(a[i],key)>0)
+                        {
+                                char* tmp = a[j];
+                                a[j] = a[i];
+                                a[i] = tmp;
+                                j--;
+                                flags=0;
+                        }
+                        else i++;
+                }
+                else //N->1
+                {
+                        //if(a[j] <= key)
+                        if((*func)(a[j],key)<=0)
+                        {
+                                char* tmp = a[i];
+                                a[i] = a[j];
+                                a[j] = tmp;
+                                i++;
+                                flags=1;
+                        }
+                        else j--;
+                }
+
+        }
+        if(i>1)
+                quick_sort_str(a,i,func);
+        if(length-i-1>1)
+                quick_sort_str(a+i+1,length-i-1,func);
+
+}
+
+int compare(char* a,char*b)
+{
+        //if *a > *b return 1
+        //else return 0
+        return strcmp((char*)*(char**)a,(char*)*(char**)b);
+}
+void quick_sort(int a[],int length)
+{
+//      int mid = length/2;
+//      int key = a[mid];
+        int flags = 0; //1 1->N; 0 N->1;
+        int i=0;
+        int j = length -1;
+        int key = a[i];
+        for(;i!=j;)
+        {
+                if(flags)
+                {
+                        if(a[i] > key)
+                        {
+                                int tmp = a[j];
+                                a[j] = a[i];
+                                a[i] = tmp;
+                                j--;
+                                flags=0;
+                        }
+                        else i++;
+                }
+                else //N->1
+                {
+                        if(a[j] <= key)
+                        {
+                                int tmp = a[i];
+                                a[i] = a[j];
+                                a[j] = tmp;
+                                i++;
+                                flags=1;
+                        }
+                        else j--;
+                }
+
+        }
+        if(i>1)
+                quick_sort(a,i);
+        if(length-i-1>1)
+                quick_sort(a+i+1,length-i-1);
+
+}
+
+void show(char* data[],int length)
+{
+        int count=1;
+        int show=0;
+        char old[8];
+        memcpy(old,data[0],8);
+        for(int i=1;i<length;i++)
+        {
+//              if(data[i] ==old)
+                if(strcmp(data[i],old)==0)
+                        count ++;
+                else
+                {
+
+                        if(count>1)
+                        {
+//                              itoa(old,old,10);
+                                //snprintf(old,sizeof(buff),"%d",old);
+                                cout<<old[0]<<old[1]<<old[2]<<'-'<<old[3]<<old[4]<<old[5]<<old[6]<<" "<<count<<endl;
+                                count=1;
+                                show=1;
+                        }
+                        //old = data[i];
+                        memcpy(old,data[i],8);
+                }
+        }
+        if(count>1)
+        {
+                cout<<old[0]<<old[1]<<old[2]<<'-'<<old[3]<<old[4]<<old[5]<<old[6]<<" "<<count<<endl;
+                count=0;
+                show=1;
+        }
+        if(show==0)
+                cout<<"No duplicates."<<endl;
+
+}
+int main2()
+{
+        int a[9]={9,8,7,6,5,4,3,2,1};
+        quick_sort(a,9);
+        for(int i=0;i<9;i++)
+                cout<<a[i]<<endl;
+        return 0;
+}
+char buf[512];
+int main()
+{
+        string s;
+        getline(cin,s);
+        int length = atoi(s.c_str());
+        //int *data = new int[length];
+        char **data =(char**) new long[length];
+        char *str = new char[length*8];
+        if(!str || !data)
+                return -1;
+        int i=0;
+        //while(getline(cin,s))
+	for(int mm=0;mm<length;mm++)
+        {
+                //decode(s,str+ i*8);
+		scanf("%s",buf);
+                decode(buf,str+ i*8);
+                data[i] =  str + i*8;
+                i++;
+        }
+        //quick_sort_str(data,length,compare);
+        //quick_sort_str(data,length,(int(*) (char*,char*))strcmp);
+        qsort(data,length,sizeof(data[0]),(int(*)(const void *,const void *))compare);
+//      for(int i=0;i<length;i++)
+//      {
+//              for(int j=0;j<8;j++)
+//                      printf("%x-",((char*)data)[i*8+j]);
+//              cout<<endl;
+//      }
+        show(data,length);
+        delete data;
+        delete str;
+        return 0;
+}
